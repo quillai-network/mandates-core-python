@@ -23,17 +23,25 @@ pip install mandates-core
 ```
 
 ## Quickstart
+
+```python
 from eth_account import Account
 from mandates_core import Mandate, build_core
+```
 
 # 1. Create demo accounts and CAIP-10 identifiers
+
+```python
 client_acct = Account.create()
 server_acct = Account.create()
 
 client_caip10 = f"eip155:1:{client_acct.address}"
 server_caip10 = f"eip155:1:{server_acct.address}"
+```
 
 # 2. Build a primitive core (swap@1) from the remote registry
+
+```python
 core = build_core(
     "swap@1",
     {
@@ -46,8 +54,10 @@ core = build_core(
         "deadline": "2025-12-31T00:00:00Z",
     },
 )
-
+```
 # 3. Create a Mandate
+
+```python
 m = Mandate(
     version="0.1.0",
     client=client_caip10,
@@ -56,18 +66,23 @@ m = Mandate(
     intent="Swap 100 USDC for WBTC on Ethereum mainnet",
     core=core,
 )
+```
 
 # 4. Sign as server then client
+
+```python
 m.sign_as_server(server_acct.key.hex())
 m.sign_as_client(client_acct.key.hex())
+```
 
 # 5. Verify signatures
+
+```python
 result = m.verify_all()
 print("Client signature valid:", result["client"]["ok"])
 print("Server signature valid:", result["server"]["ok"])
 print("All valid:", result["all_ok"])
-
-
+```
 
 
 # mandates-core (Python)
